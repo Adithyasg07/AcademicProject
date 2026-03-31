@@ -1,0 +1,6 @@
+@OrganicProductsProject1_HostAddress = http://localhost:5249
+
+GET {{OrganicProductsProject1_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

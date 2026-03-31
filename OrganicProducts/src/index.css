@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* Senior UX: Global Hide Scrollbars to make the visuals clean */
+body, .hide-scrollbar {
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none;    /* Firefox */
+}
+
+body::-webkit-scrollbar, .hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
