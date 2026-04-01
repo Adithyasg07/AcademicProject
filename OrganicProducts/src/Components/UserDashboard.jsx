@@ -96,7 +96,8 @@ export default function UserDashboard() {
               size: o.Size,
               status: o.Status,
               date: o.CreatedAt,
-              total: o.OrderTotal
+              total: o.OrderTotal,
+              paymentMethod: o.PaymentMethod || "UPI"
             });
           });
         } else {
@@ -110,7 +111,8 @@ export default function UserDashboard() {
             size: o.Size,
             status: o.Status,
             date: o.CreatedAt,
-            total: o.OrderTotal
+            total: o.OrderTotal,
+            paymentMethod: o.PaymentMethod || "UPI"
           });
         }
       });
@@ -161,11 +163,13 @@ export default function UserDashboard() {
     }
   };
 
+  const [selectedMethod, setSelectedMethod] = useState("UPI");
+
   const handlePlaceOrder = async () => {
     try {
       const orderReq = {
         totalAmount: getCartTotal(),
-        paymentMethod: "UPI" // Default for now
+        paymentMethod: selectedMethod
       };
       await apiService.post("/Orders", orderReq);
       clearCart(); // Clear local cart state immediately
@@ -310,10 +314,23 @@ export default function UserDashboard() {
                       </div>
                     ))}
                   </div>
-                  <div className="border-t pt-6 flex flex-col sm:flex-row justify-between items-center gap-6">
-                    <div>
+                  <div className="border-t pt-6 flex flex-col sm:flex-row justify-between items-end gap-6 shadow-top">
+                    <div className="flex-1 w-full">
                       <p className="text-gray-500 text-lg">Subtotal</p>
-                      <h3 className="text-3xl font-black text-green-800 tracking-tight">₹{getCartTotal()}</h3>
+                      <h3 className="text-3xl font-black text-green-800 tracking-tight mb-4">₹{getCartTotal()}</h3>
+                      
+                      <div className="mb-2">
+                        <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">Payment Method</label>
+                        <select 
+                          value={selectedMethod}
+                          onChange={(e) => setSelectedMethod(e.target.value)}
+                          className="w-full sm:w-64 p-3 border-2 border-gray-100 rounded-xl bg-white text-gray-800 font-semibold focus:border-green-600 outline-none transition-all"
+                        >
+                          <option value="UPI">UPI / PhonePe / GooglePay</option>
+                          <option value="COD">Cash on Delivery</option>
+                          <option value="CARD">Credit / Debit Card</option>
+                        </select>
+                      </div>
                     </div>
                     <button onClick={handlePlaceOrder} className="w-full sm:w-auto bg-green-600 text-white px-12 py-4 rounded-2xl font-black text-lg shadow-xl hover:bg-green-700 transition-all transform hover:scale-105 active:scale-95">PROCEED TO CHECKOUT</button>
                   </div>
@@ -444,10 +461,10 @@ export default function UserDashboard() {
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {orders.map((order) => (
-                        <tr key={order.id} className="hover:bg-green-50/30 transition-colors">
+                        <tr key={`${order.id}-${order.product}`} className="hover:bg-green-50/30 transition-colors">
                           <td className="p-5 font-mono text-gray-500 text-sm">#TXN-{1000 + order.id}</td>
-                          <td className="p-5 font-black text-gray-800">₹{order.amount}</td>
-                          <td className="p-5"><span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-black uppercase tracking-wider">UPI</span></td>
+                          <td className="p-5 font-black text-gray-800">₹{order.total}</td>
+                          <td className="p-5"><span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-black uppercase tracking-wider">{order.paymentMethod}</span></td>
                           <td className="p-5"><span className="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-black uppercase tracking-wider">Successful</span></td>
                         </tr>
                       ))}

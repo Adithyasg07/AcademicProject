@@ -145,22 +145,6 @@ const ProductDetails = () => {
             className="w-full h-[550px] object-contain mx-auto"
           />
         </div>
-
-        <div className="grid grid-cols-4 gap-3">
-          {selectedProduct.images.map((img, idx) => (
-            <img
-              key={idx}
-              src={img}
-              alt="thumb"
-              onClick={() => setMainImage(img)}
-              className={`h-28 object-cover cursor-pointer border-2 rounded ${
-                mainImage === img
-                  ? "border-green-600"
-                  : "border-gray-200"
-              }`}
-            />
-          ))}
-        </div>
       </div>
 
       {/* DETAILS */}

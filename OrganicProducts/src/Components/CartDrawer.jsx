@@ -11,6 +11,7 @@ export default function CartDrawer({ isOpen, onClose }) {
   const { cartItems, updateQuantity, removeFromCart, getCartTotal, clearCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [selectedMethod, setSelectedMethod] = useState("UPI");
 
   const handleCheckout = async () => {
     if (!isAuthenticated) {
@@ -24,7 +25,7 @@ export default function CartDrawer({ isOpen, onClose }) {
     try {
       const orderReq = {
         totalAmount: getCartTotal(),
-        paymentMethod: "UPI"
+        paymentMethod: selectedMethod
       };
       await apiService.post("/Orders", orderReq);
       
@@ -92,6 +93,19 @@ export default function CartDrawer({ isOpen, onClose }) {
                 <div className="flex justify-between font-bold text-lg mb-4">
                   <span>Total:</span>
                   <span>₹{getCartTotal()}</span>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wider">Select Payment Method</label>
+                  <select 
+                    value={selectedMethod}
+                    onChange={(e) => setSelectedMethod(e.target.value)}
+                    className="w-full p-3 border-2 border-gray-100 rounded-xl bg-white text-gray-800 font-semibold focus:border-green-600 outline-none transition-all"
+                  >
+                    <option value="UPI">UPI / PhonePe / GooglePay</option>
+                    <option value="COD">Cash on Delivery</option>
+                    <option value="CARD">Credit / Debit Card</option>
+                  </select>
                 </div>
                 <button 
                   onClick={handleCheckout}
