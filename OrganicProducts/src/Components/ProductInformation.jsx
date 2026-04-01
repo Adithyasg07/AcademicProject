@@ -137,6 +137,25 @@ const ProductInformation = () => {
             />
           </div>
 
+          {/* THUMBNAILS (Bestseller only) */}
+          {selectedProduct?.isBestseller && (
+            <div className="grid grid-cols-4 gap-3 mt-4">
+              {selectedProduct?.images?.map((img, index) => (
+                <img
+                  key={index}
+                  src={img}
+                  alt="product"
+                  onClick={() => setMainImage(img)}
+                  className={`h-16 sm:h-20 w-full object-contain p-1 rounded cursor-pointer transition
+                  ${
+                    mainImage === img
+                      ? "ring-2 ring-green-600"
+                      : "ring-1 ring-gray-200"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* RIGHT SIDE DETAILS */}

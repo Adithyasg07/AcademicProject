@@ -78,6 +78,8 @@ export default function UserDashboard() {
         "Everyday Spices Combo": ["Organic Turmeric", "Organic Red Chilli", "Organic Coriander"]
       };
 
+      const bestsellerNames = (featuredProducts || []).map(p => p.name);
+
       const expandedOrders = [];
       (ordersData || []).forEach(o => {
         const itemName = o.ItemName || "";
@@ -97,6 +99,7 @@ export default function UserDashboard() {
               status: o.Status,
               date: o.CreatedAt,
               total: o.OrderTotal,
+              isBestseller: bestsellerNames.includes(member),
               paymentMethod: o.PaymentMethod || "UPI"
             });
           });
@@ -112,6 +115,7 @@ export default function UserDashboard() {
             status: o.Status,
             date: o.CreatedAt,
             total: o.OrderTotal,
+            isBestseller: bestsellerNames.includes(itemName),
             paymentMethod: o.PaymentMethod || "UPI"
           });
         }
@@ -414,6 +418,9 @@ export default function UserDashboard() {
                             <span className="font-semibold text-gray-800">{item.product}</span>
                             {item.isComboMember && (
                               <span className="block text-[10px] text-green-600 font-bold uppercase tracking-wider">Part of {item.comboHead}</span>
+                            )}
+                            {item.isBestseller && (
+                              <span className="block text-[10px] text-green-600 font-bold uppercase tracking-wider">Part of Bestseller</span>
                             )}
                           </td>
                           <td className="p-5 text-gray-600 font-medium">{item.quantity}</td>
